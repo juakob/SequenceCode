@@ -11,7 +11,7 @@ class HelpFunction
 	{
 		
 	}
-	public static function clear(arr:Array<Dynamic>){
+	public static inline function clear(arr:Array<Dynamic>){
         #if (cpp||php)
            arr.splice(0,arr.length);           
         #else

@@ -13,6 +13,7 @@ class SequenceCode
 	private var mDoForFunctions:Array<Function>;
 	private var mInstant:Array<Bool>;
 	private var mCondition:Array<Function>;
+private var mAnyFunctions:Array < Void->Void>;
 	private var mCurrentFunction:Function;
 	
 	
@@ -23,6 +24,7 @@ class SequenceCode
 		mDoForFunctions = new Array();
 		mCondition = new Array();
 		mInstant = new Array();
+		mAnyFunctions = new Array();
 	}
 	public function pushInstantFunction(func:Function, instant:Bool = false):Void
 	{
@@ -37,6 +39,16 @@ class SequenceCode
 	{
 		mFunctions.push(func);
 		mInstant.push(instant);
+	}
+	public function addFunctionSingle(func:Void->Void, instant:Bool = false):Void
+	{
+		mAnyFunctions.push(func);
+		addFunction(executeFunctionSingle,instant);
+	}
+	private function executeFunctionSingle(aDt:Float):Bool
+	{
+		mAnyFunctions.shift()();
+		return true;
 	}
 	public function addDoFor(func:Function, time:Float):Void
 	{
@@ -185,6 +197,7 @@ class SequenceCode
 		HelpFunction.clear(mFunctions);
 		HelpFunction.clear(mDoForFunctions);
 		HelpFunction.clear(mCondition);
+		HelpFunction.clear(mAnyFunctions);
 		mCurrentFunction = null;
 	}
 	
@@ -195,11 +208,14 @@ class SequenceCode
 		HelpFunction.clear(mDoForFunctions);
 		HelpFunction.clear(mInstant);
 		HelpFunction.clear(mCondition);
+		HelpFunction.clear(mAnyFunctions);
 		mCurrentFunction=null;
 	}
 	
-	
-	
+	public function active():Bool
+	{
+		return mFunctions.length > 0;
+	}
 	
 	
 }
